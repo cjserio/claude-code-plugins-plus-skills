@@ -69,10 +69,10 @@ test.describe('Mobile Viewport Tests', () => {
     // Navigate to explore page
     await page.goto('/explore');
 
-    // Verify no significant horizontal scroll (allow small margin for scrollbar in emulation)
+    // Verify no horizontal scroll
     const bodyWidth = await page.evaluate(() => document.body.scrollWidth);
     const viewportWidth = await page.evaluate(() => window.innerWidth);
-    expect(bodyWidth).toBeLessThanOrEqual(viewportWidth + 10);
+    expect(bodyWidth).toBeLessThanOrEqual(viewportWidth);
 
     // Verify search input is visible
     const searchInput = page.locator('.hero-search-input').first();
