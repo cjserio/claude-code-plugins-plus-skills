@@ -410,7 +410,7 @@ statsItems.push({ label: 'Pricing', value: formatPricing(plugin.pricing) });
     margin-bottom: 2rem;
     font-size: 0.95rem;
     font-family: 'Source Sans 3', system-ui, sans-serif;
-    transition: opacity 0.2s;
+    transition: opacity var(--duration-fast) var(--ease-out);
   }
 
   .back-link:hover {
@@ -458,7 +458,7 @@ statsItems.push({ label: 'Pricing', value: formatPricing(plugin.pricing) });
     vertical-align: middle;
     margin-left: 0.5rem;
     text-decoration: none;
-    transition: transform 0.2s;
+    transition: transform var(--duration-fast) var(--ease-out);
   }
 
   .verification-badge:hover {
@@ -470,7 +470,7 @@ statsItems.push({ label: 'Pricing', value: formatPricing(plugin.pricing) });
     border: 1.5px solid;
     font-weight: 600;
     text-decoration: none;
-    transition: all 0.2s;
+    transition: all var(--duration-fast) var(--ease-out);
   }
 
   .badge.verified:hover {
@@ -505,7 +505,7 @@ statsItems.push({ label: 'Pricing', value: formatPricing(plugin.pricing) });
     padding: 1rem 1.5rem;
     background: var(--surface-2, var(--card));
     border: 1px solid var(--border, var(--brand-light-gray));
-    border-radius: 12px;
+    border-radius: var(--radius-lg);
     margin-bottom: 1.5rem;
     overflow-x: auto;
     font-family: 'DM Mono', 'SF Mono', Monaco, monospace;
@@ -542,7 +542,7 @@ statsItems.push({ label: 'Pricing', value: formatPricing(plugin.pricing) });
   .section {
     background: var(--surface-2, var(--card));
     border: 1px solid var(--border, var(--brand-light-gray));
-    border-radius: 12px;
+    border-radius: var(--radius-lg);
     padding: 1.5rem;
     margin-bottom: 1.5rem;
     box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
@@ -564,10 +564,10 @@ statsItems.push({ label: 'Pricing', value: formatPricing(plugin.pricing) });
 
   .install-box {
     background: var(--brand-dark);
-    border-radius: 8px;
+    border-radius: var(--radius-md);
     padding: 1rem 1.25rem;
     font-family: 'SF Mono', Monaco, 'Cascadia Code', monospace;
-    font-size: 0.95rem;
+    font-size: 0.9rem;
     position: relative;
     margin-bottom: 1rem;
   }
@@ -583,12 +583,12 @@ statsItems.push({ label: 'Pricing', value: formatPricing(plugin.pricing) });
     right: 0.75rem;
     background: rgba(255, 255, 255, 0.1);
     border: 1px solid rgba(255, 255, 255, 0.2);
-    border-radius: 6px;
+    border-radius: var(--radius-sm);
     padding: 0.4rem 0.8rem;
     font-size: 0.85rem;
     color: white;
     cursor: pointer;
-    transition: all 0.2s;
+    transition: all var(--duration-fast) var(--ease-out);
     font-family: 'Source Sans 3', system-ui, sans-serif;
   }
 
@@ -610,7 +610,7 @@ statsItems.push({ label: 'Pricing', value: formatPricing(plugin.pricing) });
   .tip code {
     background: var(--surface-3, var(--brand-light-gray));
     padding: 0.15rem 0.4rem;
-    border-radius: 4px;
+    border-radius: var(--radius-sm);
     font-size: 0.85rem;
     color: var(--text, var(--brand-dark));
   }
@@ -676,7 +676,7 @@ statsItems.push({ label: 'Pricing', value: formatPricing(plugin.pricing) });
     background: var(--brand-dark);
     color: var(--brand-light, #f5f5f5);
     padding: 0.75rem 1rem;
-    border-radius: 6px;
+    border-radius: var(--radius-sm);
     overflow-x: auto;
     margin-bottom: 0.75rem;
     font-size: 0.85rem;
@@ -749,7 +749,7 @@ statsItems.push({ label: 'Pricing', value: formatPricing(plugin.pricing) });
     background: linear-gradient(135deg, var(--brand-orange) 0%, var(--brand-orange-dark) 100%);
     color: white;
     padding: 0.4rem 1rem;
-    border-radius: 6px;
+    border-radius: var(--radius-sm);
     font-size: 0.9rem;
     font-weight: 500;
     font-family: 'Source Sans 3', system-ui, sans-serif;
@@ -774,14 +774,14 @@ statsItems.push({ label: 'Pricing', value: formatPricing(plugin.pricing) });
   .expand-all-btn {
     background: var(--surface-3, var(--brand-light-gray));
     border: 1px solid var(--border, var(--brand-mid-gray));
-    border-radius: 6px;
+    border-radius: var(--radius-sm);
     padding: 0.35rem 0.85rem;
     font-size: 0.8rem;
     font-weight: 500;
     color: var(--text-2, var(--brand-mid-gray));
     cursor: pointer;
     font-family: 'Source Sans 3', system-ui, sans-serif;
-    transition: all 0.2s;
+    transition: all var(--duration-fast) var(--ease-out);
   }
 
   .expand-all-btn:hover {
@@ -797,9 +797,9 @@ statsItems.push({ label: 'Pricing', value: formatPricing(plugin.pricing) });
 
   .gist-card {
     border: 1px solid var(--border, var(--brand-light-gray));
-    border-radius: 8px;
+    border-radius: var(--radius-md);
     overflow: hidden;
-    transition: border-color 0.2s;
+    transition: border-color var(--duration-fast) var(--ease-out);
   }
 
   .gist-card:hover {
@@ -829,7 +829,7 @@ statsItems.push({ label: 'Pricing', value: formatPricing(plugin.pricing) });
     color: var(--text-3, var(--brand-mid-gray));
     display: flex;
     align-items: center;
-    transition: color 0.2s;
+    transition: color var(--duration-fast) var(--ease-out);
   }
 
   .gist-toggle:hover {
@@ -837,7 +837,7 @@ statsItems.push({ label: 'Pricing', value: formatPricing(plugin.pricing) });
   }
 
   .toggle-icon {
-    transition: transform 0.2s;
+    transition: transform var(--duration-fast) var(--ease-out);
   }
 
   .file-icon {
@@ -861,7 +861,7 @@ statsItems.push({ label: 'Pricing', value: formatPricing(plugin.pricing) });
     color: var(--text-3, var(--brand-mid-gray));
     background: var(--surface-2, var(--brand-light-gray));
     padding: 0.1rem 0.4rem;
-    border-radius: 4px;
+    border-radius: var(--radius-sm);
     flex-shrink: 0;
   }
 
@@ -872,7 +872,7 @@ statsItems.push({ label: 'Pricing', value: formatPricing(plugin.pricing) });
     text-decoration: none;
     white-space: nowrap;
     font-family: 'Source Sans 3', system-ui, sans-serif;
-    transition: color 0.2s;
+    transition: color var(--duration-fast) var(--ease-out);
   }
 
   .gist-view-link:hover {
@@ -906,7 +906,7 @@ statsItems.push({ label: 'Pricing', value: formatPricing(plugin.pricing) });
     font-family: 'DM Mono', 'SF Mono', Monaco, monospace;
     font-size: 0.7rem;
     padding: 0.15rem 0.45rem;
-    border-radius: 4px;
+    border-radius: var(--radius-sm);
     background: rgba(234, 170, 0, 0.1);
     color: var(--brand-orange);
     border: 1px solid rgba(234, 170, 0, 0.2);
@@ -949,11 +949,11 @@ statsItems.push({ label: 'Pricing', value: formatPricing(plugin.pricing) });
   .related-card {
     background: var(--surface-2, var(--brand-light));
     border: 1px solid var(--border, var(--brand-light-gray));
-    border-radius: 8px;
+    border-radius: var(--radius-md);
     padding: 1rem;
     text-decoration: none;
     color: var(--text, var(--brand-dark));
-    transition: all 0.2s;
+    transition: all var(--duration-fast) var(--ease-out);
   }
 
   .related-card:hover {
@@ -1010,7 +1010,7 @@ statsItems.push({ label: 'Pricing', value: formatPricing(plugin.pricing) });
   .tag {
     background: var(--surface-3, var(--brand-light-gray));
     padding: 0.2rem 0.55rem;
-    border-radius: 4px;
+    border-radius: var(--radius-sm);
     font-size: 0.72rem;
     color: var(--text-2, var(--brand-mid-gray));
     font-family: 'DM Mono', 'SF Mono', Monaco, monospace;

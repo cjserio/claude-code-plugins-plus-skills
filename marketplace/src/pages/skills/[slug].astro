@@ -53,14 +53,14 @@ const cleanTools = (tools: string[]) =>
 
     .breadcrumb {
       font-size: 0.875rem;
-      color: var(--brand-mid-gray);
+      color: var(--text-2, var(--brand-mid-gray));
       margin-bottom: 2rem;
     }
 
     .breadcrumb a {
-      color: var(--brand-mid-gray);
+      color: var(--text-2, var(--brand-mid-gray));
       text-decoration: none;
-      transition: color 0.2s;
+      transition: color var(--duration-fast) var(--ease-out);
     }
 
     .breadcrumb a:hover {
@@ -74,13 +74,13 @@ const cleanTools = (tools: string[]) =>
     .skill-header h1 {
       font-size: 2.5rem;
       font-weight: 700;
-      color: var(--brand-dark);
+      color: var(--text, var(--brand-dark));
       margin-bottom: 1rem;
     }
 
     .skill-description {
       font-size: 1.1rem;
-      color: var(--brand-mid-gray);
+      color: var(--text-2, var(--brand-mid-gray));
       line-height: 1.7;
       margin-bottom: 1.5rem;
     }
@@ -90,7 +90,7 @@ const cleanTools = (tools: string[]) =>
       flex-wrap: wrap;
       gap: 1.5rem;
       font-size: 0.875rem;
-      color: var(--brand-mid-gray);
+      color: var(--text-2, var(--brand-mid-gray));
       margin-bottom: 1rem;
     }
 
@@ -103,7 +103,7 @@ const cleanTools = (tools: string[]) =>
     .metadata-item svg {
       width: 18px;
       height: 18px;
-      color: var(--brand-mid-gray);
+      color: var(--text-2, var(--brand-mid-gray));
     }
 
     /* Compatible platforms */
@@ -117,7 +117,7 @@ const cleanTools = (tools: string[]) =>
       font-family: 'DM Mono', 'SF Mono', Monaco, monospace;
       font-size: 0.75rem;
       padding: 0.25rem 0.6rem;
-      border-radius: 4px;
+      border-radius: var(--radius-sm);
       background: var(--surface-3, var(--brand-light-gray));
       color: var(--text-2, var(--brand-mid-gray));
       border: 1px solid var(--border, var(--brand-light-gray));
@@ -129,9 +129,9 @@ const cleanTools = (tools: string[]) =>
       align-items: center;
       gap: 1.25rem;
       padding: 1rem 1.5rem;
-      background: var(--card);
-      border: 1px solid var(--brand-light-gray);
-      border-radius: 12px;
+      background: var(--surface-2, var(--card));
+      border: 1px solid var(--border, var(--brand-light-gray));
+      border-radius: var(--radius-lg);
       margin-bottom: 1.5rem;
       overflow-x: auto;
       font-family: 'DM Mono', 'SF Mono', Monaco, monospace;
@@ -148,12 +148,12 @@ const cleanTools = (tools: string[]) =>
     .stat-value {
       font-size: 1rem;
       font-weight: 600;
-      color: var(--brand-dark);
+      color: var(--text, var(--brand-dark));
     }
 
     .stat-label {
       font-size: 0.7rem;
-      color: var(--brand-mid-gray);
+      color: var(--text-3, var(--brand-mid-gray));
       text-transform: uppercase;
       letter-spacing: 0.04em;
     }
@@ -161,16 +161,17 @@ const cleanTools = (tools: string[]) =>
     .stats-divider {
       width: 1px;
       height: 2rem;
-      background: var(--brand-light-gray);
+      background: var(--border, var(--brand-light-gray));
       flex-shrink: 0;
     }
 
     .section-box {
       padding: 1.5rem;
-      background: var(--card);
-      border: 2px solid var(--brand-light-gray);
-      border-radius: 12px;
+      background: var(--surface-2, var(--card));
+      border: 1px solid var(--border, var(--brand-light-gray));
+      border-radius: var(--radius-lg);
       margin-bottom: 1.5rem;
+      box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
     }
 
     .section-box.highlight {
@@ -186,7 +187,7 @@ const cleanTools = (tools: string[]) =>
     .section-title {
       font-size: 1rem;
       font-weight: 600;
-      color: var(--brand-dark);
+      color: var(--text, var(--brand-dark));
       margin-bottom: 1rem;
       font-family: 'Source Sans 3', system-ui, sans-serif;
     }
@@ -205,7 +206,7 @@ const cleanTools = (tools: string[]) =>
       padding: 0.4rem 0.85rem;
       background: var(--brand-orange);
       color: white;
-      border-radius: 6px;
+      border-radius: var(--radius-sm);
       font-size: 0.8rem;
       font-weight: 600;
       font-family: 'Source Sans 3', system-ui, sans-serif;
@@ -237,7 +238,7 @@ const cleanTools = (tools: string[]) =>
 
     .plugin-details p {
       font-size: 0.9rem;
-      color: var(--brand-mid-gray);
+      color: var(--text-2, var(--brand-mid-gray));
       margin-bottom: 0.5rem;
     }
 
@@ -245,7 +246,7 @@ const cleanTools = (tools: string[]) =>
       display: flex;
       gap: 1rem;
       font-size: 0.8rem;
-      color: var(--brand-mid-gray);
+      color: var(--text-2, var(--brand-mid-gray));
     }
 
     .plugin-meta span {
@@ -257,12 +258,12 @@ const cleanTools = (tools: string[]) =>
       padding: 0.6rem 1.25rem;
       background: var(--brand-orange);
       color: white;
-      border-radius: 8px;
+      border-radius: var(--radius-md);
       text-decoration: none;
       font-family: 'Source Sans 3', system-ui, sans-serif;
       font-weight: 600;
       font-size: 0.875rem;
-      transition: all 0.2s;
+      transition: all var(--duration-fast) var(--ease-out);
     }
 
     .btn-primary:hover {
@@ -272,11 +273,11 @@ const cleanTools = (tools: string[]) =>
 
     .install-command {
       margin: 0;
-      padding: 0.75rem 1rem;
+      padding: 1rem 1.25rem;
       background: rgba(255,255,255,0.08);
-      border-radius: 6px;
-      font-size: 0.875rem;
-      color: var(--brand-light);
+      border-radius: var(--radius-md);
+      font-size: 0.9rem;
+      color: var(--brand-orange-light);
       overflow-x: auto;
       cursor: pointer;
       font-family: 'SF Mono', 'Fira Code', monospace;
@@ -285,7 +286,7 @@ const cleanTools = (tools: string[]) =>
     .install-note {
       margin-top: 0.75rem;
       font-size: 0.8rem;
-      color: var(--brand-mid-gray);
+      color: var(--text-2, var(--brand-mid-gray));
     }
 
     .skill-content-section {
@@ -295,22 +296,23 @@ const cleanTools = (tools: string[]) =>
     .skill-content-section h2 {
       font-size: 1.5rem;
       font-weight: 700;
-      color: var(--brand-dark);
+      color: var(--text, var(--brand-dark));
       margin-bottom: 1rem;
     }
 
     .skill-content {
       padding: 2rem;
-      background: var(--card);
-      border: 2px solid var(--brand-light-gray);
-      border-radius: 12px;
+      background: var(--surface-2, var(--card));
+      border: 1px solid var(--border, var(--brand-light-gray));
+      border-radius: var(--radius-lg);
       line-height: 1.8;
+      box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
     }
 
     .skill-content h1 {
       font-size: 1.75rem;
       font-weight: 700;
-      color: var(--brand-dark);
+      color: var(--text, var(--brand-dark));
       margin-top: 2rem;
       margin-bottom: 0.75rem;
     }
@@ -318,7 +320,7 @@ const cleanTools = (tools: string[]) =>
     .skill-content h2 {
       font-size: 1.4rem;
       font-weight: 700;
-      color: var(--brand-dark);
+      color: var(--text, var(--brand-dark));
       margin-top: 1.5rem;
       margin-bottom: 0.5rem;
     }
@@ -326,13 +328,13 @@ const cleanTools = (tools: string[]) =>
     .skill-content h3 {
       font-size: 1.15rem;
       font-weight: 600;
-      color: var(--brand-dark);
+      color: var(--text, var(--brand-dark));
       margin-top: 1rem;
       margin-bottom: 0.5rem;
     }
 
     .skill-content p {
-      color: var(--brand-dark);
+      color: var(--text, var(--brand-dark));
       margin-bottom: 1rem;
     }
 
@@ -342,14 +344,14 @@ const cleanTools = (tools: string[]) =>
     }
 
     .skill-content li {
-      color: var(--brand-dark);
+      color: var(--text, var(--brand-dark));
       margin-bottom: 0.5rem;
     }
 
     .skill-content code {
-      background: var(--brand-light-gray);
+      background: var(--surface-3, var(--brand-light-gray));
       padding: 0.15rem 0.5rem;
-      border-radius: 4px;
+      border-radius: var(--radius-sm);
       font-size: 0.85rem;
       font-family: 'SF Mono', 'Fira Code', monospace;
       color: var(--brand-orange-dark);
@@ -359,7 +361,7 @@ const cleanTools = (tools: string[]) =>
       background: var(--brand-dark);
       color: var(--brand-light);
       padding: 1rem 1.25rem;
-      border-radius: 8px;
+      border-radius: var(--radius-md);
       overflow-x: auto;
       margin-bottom: 1rem;
     }
@@ -374,7 +376,7 @@ const cleanTools = (tools: string[]) =>
       border-left: 4px solid var(--brand-orange);
       padding-left: 1rem;
       font-style: italic;
-      color: var(--brand-mid-gray);
+      color: var(--text-2, var(--brand-mid-gray));
       margin-bottom: 1rem;
     }
 
@@ -390,9 +392,9 @@ const cleanTools = (tools: string[]) =>
     .skill-footer {
       margin-top: 2rem;
       padding-top: 1.5rem;
-      border-top: 1px solid var(--brand-light-gray);
+      border-top: 1px solid var(--border, var(--brand-light-gray));
       font-size: 0.8rem;
-      color: var(--brand-mid-gray);
+      color: var(--text-2, var(--brand-mid-gray));
     }
 
     .skill-footer a {
@@ -411,7 +413,7 @@ const cleanTools = (tools: string[]) =>
     .related-skills-heading {
       font-size: 1.25rem;
       font-weight: 700;
-      color: var(--brand-dark);
+      color: var(--text, var(--brand-dark));
       margin-bottom: 1rem;
     }
 
@@ -424,9 +426,9 @@ const cleanTools = (tools: string[]) =>
     .related-skill-card {
       display: block;
       padding: 1rem;
-      background: var(--card);
-      border: 1px solid var(--brand-light-gray);
-      border-radius: 8px;
+      background: var(--surface-2, var(--card));
+      border: 1px solid var(--border, var(--brand-light-gray));
+      border-radius: var(--radius-md);
       text-decoration: none;
       transition: border-color var(--duration-fast) var(--ease-out), transform var(--duration-fast) var(--ease-out);
     }
@@ -439,13 +441,13 @@ const cleanTools = (tools: string[]) =>
     .related-skill-title {
       font-size: 0.95rem;
       font-weight: 600;
-      color: var(--brand-dark);
+      color: var(--text, var(--brand-dark));
       margin-bottom: 0.25rem;
     }
 
     .related-skill-description {
       font-size: 0.8rem;
-      color: var(--brand-mid-gray);
+      color: var(--text-2, var(--brand-mid-gray));
       line-height: 1.4;
       margin-bottom: 0.5rem;
     }
