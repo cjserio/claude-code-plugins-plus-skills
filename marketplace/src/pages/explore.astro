@@ -775,7 +775,7 @@ const pageDescription = `Search all ${searchIndex.stats.totalPlugins} plugins an
                   <span class="keyword-tag">{kw.replace(/-/g, ' ')}</span>
                 ))}
                 {item.keywords.length > 3 && (
-                  <span class="keyword-tag">+{item.keywords.length - 3}</span>
+                  <span class="keyword-tag">+{item.keywords.length - 3} more</span>
                 )}
               </div>
             )}
@@ -786,7 +786,7 @@ const pageDescription = `Search all ${searchIndex.stats.totalPlugins} plugins an
                   <span class="tool-tag">{tool}</span>
                 ))}
                 {item.allowedTools.length > 3 && (
-                  <span class="tool-tag">+{item.allowedTools.length - 3}</span>
+                  <span class="tool-tag">+{item.allowedTools.length - 3} more</span>
                 )}
               </div>
             )}
