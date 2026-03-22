@@ -374,6 +374,16 @@ jobs:
             echo "⚠️  No Python test files found"
           fi
 
+      - name: Setup Python for validation
+        if: matrix.test-type == 'validation-scripts'
+        uses: actions/setup-python@v6
+        with:
+          python-version: '3.12'
+
+      - name: Install pyyaml for validation
+        if: matrix.test-type == 'validation-scripts'
+        run: pip install pyyaml
+
       - name: Setup Node.js for validation
         if: matrix.test-type == 'validation-scripts'
         uses: actions/setup-node@v6
