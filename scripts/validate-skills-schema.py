@@ -461,9 +461,10 @@ def score_utility(path: Path, body: str, fm: dict) -> dict:
     """
     Utility (20 pts max)
     - Problem Solving Power (8): Clear use cases, practical value
-    - Degrees of Freedom (5): Flexible, configurable
+    - Degrees of Freedom (2): Flexible, configurable
     - Feedback Loops (4): Error handling, validation
     - Examples & Templates (3): Has working examples
+    - Content Density (3): Word count in body (150+ words for substance)
     """
     breakdown = {}
     body_lower = body.lower()
@@ -489,21 +490,17 @@ def score_utility(path: Path, body: str, fm: dict) -> dict:
         problem_notes.append("unclear problem/solution")
     breakdown['problem_solving'] = (problem_score, ", ".join(problem_notes))
 
-    # Degrees of Freedom (5 pts)
+    # Degrees of Freedom (2 pts) — reduced from 5 to make room for content_density
     freedom_score = 0
     freedom_notes = []
     # Check for configuration options
     if re.search(r'(?i)(optional|configur|parameter|argument|flag|option)', body):
-        freedom_score += 2
-        freedom_notes.append("has options")
-    # Check for multiple approaches
-    if re.search(r'(?i)(alternatively|or use|another approach|you can also)', body):
-        freedom_score += 2
-        freedom_notes.append("shows alternatives")
-    # Check for extensibility hints
-    if re.search(r'(?i)(extend|customize|modify|adapt)', body):
         freedom_score += 1
-        freedom_notes.append("extensible")
+        freedom_notes.append("has options")
+    # Check for multiple approaches or extensibility
+    if re.search(r'(?i)(alternatively|or use|another approach|you can also|extend|customize|modify|adapt)', body):
+        freedom_score += 1
+        freedom_notes.append("shows alternatives/extensibility")
     if not freedom_notes:
         freedom_notes.append("rigid implementation")
     breakdown['degrees_of_freedom'] = (freedom_score, ", ".join(freedom_notes))
@@ -538,6 +535,22 @@ def score_utility(path: Path, body: str, fm: dict) -> dict:
     if not examples_notes:
         examples_notes.append("no examples")
     breakdown['examples'] = (examples_score, ", ".join(examples_notes))
+
+    # Content Density (3 pts) — based on word count in body
+    body_word_count = len(body.split())
+    if body_word_count < 150:
+        density_score = 0
+        density_note = f"thin content ({body_word_count} words, minimum 150)"
+    elif body_word_count < 300:
+        density_score = 1
+        density_note = f"minimal content ({body_word_count} words, target 300+)"
+    elif body_word_count < 500:
+        density_score = 2
+        density_note = f"adequate content ({body_word_count} words)"
+    else:
+        density_score = 3
+        density_note = f"substantial content ({body_word_count} words)"
+    breakdown['content_density'] = (density_score, density_note)
 
     total = sum(v[0] for v in breakdown.values())
     return {'score': total, 'max': 20, 'breakdown': breakdown}
@@ -744,13 +757,34 @@ def calculate_modifiers(path: Path, body: str, fm: dict) -> dict:
     if '<' in body and '>' in body and re.search(r'<[a-z]+>', body):
         modifiers['xml_tags'] = (-1, "XML-like tags in body")
 
-    # Stub penalty: body <30 lines with no code blocks and no references/ -3
+    # Stub penalty: skill meets one or more stub criteria -3
     skill_dir = path.parent
-    if lines < 30:
-        code_blocks = len(re.findall(r'```', body)) // 2
-        refs_dir = skill_dir / "references"
-        if code_blocks == 0 and not refs_dir.exists():
-            modifiers['stub_penalty'] = (-3, f"Stub skill: {lines} lines, no code blocks, no references/")
+    code_blocks = len(re.findall(r'```', body)) // 2
+    md_links = len(re.findall(r'\[.*?\]\((?!https?://)[^)]+\)', body))
+    body_word_count = len(body.split())
+    placeholder_tokens = ['TODO', 'FIXME', 'REPLACE_ME', 'TBD', '[YOUR_', '<insert']
+    placeholder_count = sum(
+        len(re.findall(re.escape(tok), body, re.IGNORECASE))
+        for tok in placeholder_tokens
+    ) + len(re.findall(r'\{[a-z_]+\}', body))
+    placeholder_density = placeholder_count / body_word_count if body_word_count > 0 else 0.0
+    stub_criteria_met = (
+        lines < 30
+        or (code_blocks == 0 and md_links == 0)
+        or body_word_count < 150
+        or placeholder_density > 0.05
+    )
+    if stub_criteria_met:
+        stub_reasons_mod = []
+        if lines < 30:
+            stub_reasons_mod.append(f"{lines} lines")
+        if code_blocks == 0 and md_links == 0:
+            stub_reasons_mod.append("no code blocks or links")
+        if body_word_count < 150:
+            stub_reasons_mod.append(f"{body_word_count} words")
+        if placeholder_density > 0.05:
+            stub_reasons_mod.append(f"placeholder density {placeholder_density:.1%}")
+        modifiers['stub_penalty'] = (-3, f"Stub skill: {', '.join(stub_reasons_mod)}")
 
     # Supporting files bonus: has references/ with real content +1
     refs_dir = skill_dir / "references"
@@ -2460,6 +2494,27 @@ def validate_skill(path: Path, tier: str = TIER_STANDARD) -> Dict[str, Any]:
     errors.extend(stub_skill_errors)
     warnings.extend(stub_skill_warnings)
 
+    # Placeholder density check
+    _body_no_code = re.sub(r'```.*?```', '', body, flags=re.DOTALL)
+    _body_no_code = re.sub(r'`[^`]+`', '', _body_no_code)
+    _body_word_count = len(_body_no_code.split())
+    _placeholder_tokens = ['TODO', 'FIXME', 'REPLACE_ME', 'TBD', '[YOUR_', '<insert']
+    _placeholder_count = sum(
+        len(re.findall(re.escape(tok), _body_no_code, re.IGNORECASE))
+        for tok in _placeholder_tokens
+    ) + len(re.findall(r'\{[a-z_]+\}', _body_no_code))
+    if _body_word_count > 0:
+        _placeholder_density = _placeholder_count / _body_word_count
+        if _placeholder_density > 0.10:
+            errors.append(
+                f"[content-quality] Excessive placeholders — likely stub content "
+                f"({_placeholder_density:.1%} of words are placeholders)"
+            )
+        elif _placeholder_density > 0.05:
+            warnings.append(
+                f"[content-quality] High placeholder density ({_placeholder_density:.1%})"
+            )
+
     # Enterprise-tier quality checks (warnings only)
     if tier == TIER_ENTERPRISE:
         line_len_errors, line_len_warnings = check_line_character_length(body)
@@ -2681,13 +2736,14 @@ def populate_compliance_db(db_path: str, skill_results: list, agent_results: lis
         errors = result.get('errors', 0)
         warnings = result.get('warnings', 0)
 
-        # Parse frontmatter from the file to count fields
+        # Parse frontmatter and body from the file to count fields and detect stubs
         fm = {}
+        body_for_stub = ''
         try:
             skill_file = Path(skill_path)
             if skill_file.exists():
                 content = skill_file.read_text(encoding='utf-8')
-                fm_data, _ = parse_frontmatter(content)
+                fm_data, body_for_stub = parse_frontmatter(content)
                 fm = fm_data
         except Exception:
             pass  # Frontmatter parse failure — field counts default to 0
@@ -2695,6 +2751,29 @@ def populate_compliance_db(db_path: str, skill_results: list, agent_results: lis
         enterprise_fields = len([k for k in fm if k in SKILL_FIELDS and SKILL_FIELDS[k].get('source') == 'enterprise'])
         total_fields = anthropic_fields + enterprise_fields
         missing = [k for k in ALWAYS_REQUIRED if k not in fm]
+
+        # Compute stub criteria from body
+        _db_stub_reasons: list = []
+        if body_for_stub:
+            _db_lines = len(body_for_stub.strip().splitlines())
+            _db_code_blocks = len(re.findall(r'```', body_for_stub)) // 2
+            _db_md_links = len(re.findall(r'\[.*?\]\((?!https?://)[^)]+\)', body_for_stub))
+            _db_word_count = len(body_for_stub.split())
+            _db_placeholder_tokens = ['TODO', 'FIXME', 'REPLACE_ME', 'TBD', '[YOUR_', '<insert']
+            _db_placeholder_count = sum(
+                len(re.findall(re.escape(tok), body_for_stub, re.IGNORECASE))
+                for tok in _db_placeholder_tokens
+            ) + len(re.findall(r'\{[a-z_]+\}', body_for_stub))
+            _db_placeholder_density = _db_placeholder_count / _db_word_count if _db_word_count > 0 else 0.0
+            if _db_lines < 30:
+                _db_stub_reasons.append(f"body < 30 lines ({_db_lines})")
+            if _db_code_blocks == 0 and _db_md_links == 0:
+                _db_stub_reasons.append("no code blocks and no markdown links")
+            if _db_word_count < 150:
+                _db_stub_reasons.append(f"word count < 150 ({_db_word_count})")
+            if _db_placeholder_density > 0.05:
+                _db_stub_reasons.append(f"placeholder density > 5% ({_db_placeholder_density:.1%})")
+        is_stub_val = 1 if _db_stub_reasons else 0
 
         try:
             skill_file = Path(skill_path)
@@ -2714,7 +2793,8 @@ def populate_compliance_db(db_path: str, skill_results: list, agent_results: lis
             VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)''',
             (skill_path, total_fields, anthropic_fields, enterprise_fields,
              json_module.dumps(missing), has_refs, has_examples, has_scripts,
-             0, '[]', score, grade, errors, warnings, now, mtime, validator_version))
+             is_stub_val, json_module.dumps(_db_stub_reasons),
+             score, grade, errors, warnings, now, mtime, validator_version))
 
     if agent_results:
         for result in agent_results:
