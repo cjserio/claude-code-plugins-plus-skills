@@ -213,7 +213,6 @@ def detect_component(path: Path) -> tuple:
     - component_type: 'skill', 'agent', 'command', 'plugin', 'unknown'
     - context: 'plugin', 'standalone', 'unknown'
     """
-    context = 'unknown'
     component = 'unknown'
 
     def find_plugin_root(p: Path):
@@ -966,7 +965,7 @@ def validate_agent(path: Path) -> Dict[str, Any]:
         name = str(fm['name']).strip()
         if not name:
             errors.append("[agent] 'name' must be non-empty")
-        elif not re.match(r'^[a-z0-9][a-z0-9-]*[a-z0-9]$', name) and len(name) > 1:
+        elif not re.match(r'^[a-z0-9]+(?:-[a-z0-9]+)*$', name):
             warnings.append(f"[agent] 'name' should be kebab-case: {name}")
 
     if 'description' in fm:
@@ -2493,7 +2492,6 @@ def validate_skill(path: Path, tier: str = TIER_STANDARD) -> Dict[str, Any]:
         'line_count': len(body.splitlines()),
         'description_length': len(description),
         'grade': grade_result,
-        'frontmatter': fm,
     }
 
 
@@ -2678,7 +2676,16 @@ def populate_compliance_db(db_path: str, skill_results: list, agent_results: lis
         errors = result.get('errors', 0)
         warnings = result.get('warnings', 0)
 
-        fm = result.get('frontmatter', {})
+        # Parse frontmatter from the file to count fields
+        fm = {}
+        try:
+            skill_file = Path(skill_path)
+            if skill_file.exists():
+                content = skill_file.read_text(encoding='utf-8')
+                fm_data, _ = parse_frontmatter(content)
+                fm = fm_data
+        except Exception:
+            pass
         anthropic_fields = len([k for k in fm if k in SKILL_FIELDS and SKILL_FIELDS[k].get('source') == 'anthropic'])
         enterprise_fields = len([k for k in fm if k in SKILL_FIELDS and SKILL_FIELDS[k].get('source') == 'enterprise'])
         total_fields = anthropic_fields + enterprise_fields
@@ -2983,7 +2990,6 @@ def main() -> int:
             'grade': letter,
             'errors': len(result.get('errors', [])),
             'warnings': len(result.get('warnings', [])),
-            'frontmatter': result.get('frontmatter', {}),
         })
 
         # Check min-grade threshold
