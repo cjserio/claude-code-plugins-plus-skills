@@ -315,14 +315,24 @@ class RateLimiter:
             else:
                 self.tokens -= 1
 
-# Usage
+# Usage — combines token bucket with Retry-After handling
 limiter = RateLimiter(max_requests=480, window_seconds=60)
 
-async def safe_get_pages(client, section_id: str):
-    await limiter.acquire()
-    return await client.me.onenote.sections.by_onenote_section_id(
-        section_id
-    ).pages.get()
+async def safe_get_pages(client, section_id: str, max_retries: int = 3):
+    for attempt in range(max_retries):
+        await limiter.acquire()
+        try:
+            return await client.me.onenote.sections.by_onenote_section_id(
+                section_id
+            ).pages.get()
+        except Exception as e:
+            # Handle 429 with Retry-After header
+            if hasattr(e, "response") and e.response.status_code == 429 and attempt < max_retries - 1:
+                retry_after = int(e.response.headers.get("Retry-After", "30"))
+                await asyncio.sleep(retry_after)
+            else:
+                raise
+    raise RuntimeError("Max retries exceeded for OneNote API call")
 ```
 
 ### Step 8 — Monitor and Adjust Preemptively
